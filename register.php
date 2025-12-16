@@ -1,17 +1,21 @@
 <?php
 session_start();
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 include "includes/db.php";
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name = $_POST['name'];
+    $first_name = $_POST['first_name'];
+    $last_name = $_POST['last_name'];
     $email = $_POST['email'];
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
     $role = $_POST['role'];
 
-    $stmt = $conn->prepare("INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("ssss", $name, $email, $password, $role);
+    $stmt = $conn->prepare("INSERT INTO users (first_name, last_name, email, password, role) VALUES (?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssss", $first_name, $last_name, $email, $password, $role);
     $stmt->execute();
 
     $_SESSION['user_id'] = $conn->insert_id;
@@ -38,8 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <form method="POST" class="bg-white p-6 rounded shadow w-80">
     <h1 class="text-xl font-bold mb-4 text-center">Register</h1>
-
-    <input type="text" name="name" placeholder="Full Name" required class="w-full mb-3 px-3 py-2 border rounded">
+    <input type="text" name="first_name" placeholder="First Name" required class="w-full mb-3 px-3 py-2 border rounded">
+    <input type="text" name="last_name" placeholder="Last Name" required class="w-full mb-3 px-3 py-2 border rounded">
     <input type="email" name="email" placeholder="Email" required class="w-full mb-3 px-3 py-2 border rounded">
     <input type="password" name="password" placeholder="Password" required class="w-full mb-3 px-3 py-2 border rounded">
 
