@@ -1,0 +1,28 @@
+coach-athlete/
+│
+├── index.php
+├── login.php
+├── register.php
+├── logout.php
+│
+├── athlete/
+│   ├── dashboard.php
+│   ├── coaches.php
+│   └── bookings.php
+│
+├── coach/
+│   ├── dashboard.php
+│   ├── bookings.php
+│   └── availability.php
+│
+├── includes/
+│   ├── db.php
+│   ├── auth.php
+│   └── header.php
+│
+├── assets/
+│   ├── style.css
+│   └── script.js
+│
+└── uploads/
+    └── coach_photos/
