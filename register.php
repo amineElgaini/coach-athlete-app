@@ -6,6 +6,16 @@ error_reporting(E_ALL);
 
 include "includes/db.php";
 
+if (isset($_SESSION['user_role'])) {
+    if ($_SESSION['user_role'] === 'athlete') {
+        header("Location: athlete/dashboard.php");
+        exit;
+    } elseif ($_SESSION['user_role'] === 'coach') {
+        header("Location: coach/dashboard.php");
+        exit;
+    }
+}
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $first_name = $_POST['first_name'];
@@ -20,6 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $_SESSION['user_id'] = $conn->insert_id;
     $_SESSION['user_role'] = $role;
+    $_SESSION['user_first_name'] = $first_name;
 
     // Redirection selon rôle
     if ($role === 'coach') {

@@ -1,7 +1,20 @@
 <?php
 session_start();
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 include "includes/db.php";
+
+if (isset($_SESSION['user_role'])) {
+    if ($_SESSION['user_role'] === 'athlete') {
+        header("Location: athlete/dashboard.php");
+        exit;
+    } elseif ($_SESSION['user_role'] === 'coach') {
+        header("Location: coach/dashboard.php");
+        exit;
+    }
+}
 
 $error = "";
 
@@ -9,16 +22,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    $stmt = $conn->prepare("SELECT id, password, role FROM users WHERE email = ?");
+    $stmt = $conn->prepare("SELECT id, password, role, first_name FROM users WHERE email = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $stmt->store_result();
-    $stmt->bind_result($id, $hash, $role);
+    $stmt->bind_result($id, $hash, $role, $first_name);
     $stmt->fetch();
 
     if ($stmt->num_rows > 0 && password_verify($password, $hash)) {
         $_SESSION['user_id'] = $id;
         $_SESSION['user_role'] = $role;
+        $_SESSION['user_first_name'] = $first_name;
 
         if ($role === 'coach') {
             header("Location: coach/dashboard.php");
